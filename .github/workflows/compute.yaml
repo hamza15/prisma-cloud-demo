@@ -1,4 +1,4 @@
-name: Deploy & configure Cloud Networking
+name: Deploy & configure Cloud Compute
 
 on:
   push:
@@ -6,8 +6,8 @@ on:
       - master
       - dev
     paths:
-      - 'networking/**'
-      - '.github/workflows/networking.yaml'
+      - 'compute/**'
+      - '.github/workflows/compute.yaml'
 
 jobs:
   build:
@@ -15,26 +15,21 @@ jobs:
     runs-on: ubuntu-latest
     defaults:
       run:
-        working-directory: networking
+        working-directory: compute
     env:
-      tf_actions_working_dir: networking
+      tf_actions_working_dir: compute
     steps:
       - uses: actions/checkout@v3
         with:
           fetch-depth: 0
 
-      - name: Prisma Cloud - Bridgecrew
-        id: prisma-cloud
-        uses: bridgecrewio/checkov-action@master
-        env:
-          PRISMA_API_URL: https://api.ca.prismacloud.io
-        with:
-          api-key: ${{ secrets.BC_API_KEY }}
-
-#       - name: Run Checkov
-#         run: |
-#           export PRISMA_API_URL=https://api.ca.prismacloud.io 
-# checkov -d networking --bc-api-key PRISMA_ACCESS_KEY::PRISMA_SECRET_KEY --repo-id hamza15/prisma-cloud-demo
+      # - name: Run Prisma Cloud 
+      #   id: prisma-cloud
+      #   uses: bridgecrewio/checkov-action@master
+      #   env:
+      #     PRISMA_API_URL: https://api.ca.prismacloud.io
+      #   with:
+      #     api-key: ${{ secrets.BC_API_KEY }}
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
@@ -58,7 +53,18 @@ jobs:
       - name: Validate Terraform files
         working-directory: ${{ env.tf_actions_working_dir }}
         run: |
-          terraform plan
+          terraform plan -out tfplan
+          terraform show -json tfplan | jq '.' > tfplan.json
+
+      - name: Install Checkov
+        run: |
+          pip3 install checkov
+
+      - name: Run Checkov
+        working-directory: ${{ env.tf_actions_working_dir }}
+        run: |
+          checkov -f tfplan.json --external-checks-dir ../policies
+
 
       # - name: Run Terraform & save state
       #   working-directory: ${{ env.tf_actions_working_dir }}

@@ -35,15 +35,17 @@ jobs:
 
       - name: Terraform init
         working-directory: ${{ env.tf_actions_working_dir }}
-        # env:
-        #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         run: terraform init
 
       - name: Validate Terraform files
         working-directory: ${{ env.tf_actions_working_dir }}
         run: |
           terraform validate
+
+      - name: Validate Terraform files
+        working-directory: ${{ env.tf_actions_working_dir }}
+        run: |
+          terraform plan
 
       # - name: Run Terraform & save state
       #   working-directory: ${{ env.tf_actions_working_dir }}

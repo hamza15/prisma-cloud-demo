@@ -1,0 +1,53 @@
+name: Deploy & configure Cloud Networking
+
+on:
+  push:
+    branches:
+      - main
+      - dev
+    paths:
+      - 'networking/**'
+      - '.github/workflows/networking.yaml'
+# only executes on pushes that change files under the networking folder.
+
+jobs:
+  build:
+    name: Setup
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: networking
+    env:
+      tf_actions_working_dir: networking
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          fetch-depth: 0
+
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: us-east-1
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform init
+        working-directory: ${{ env.tf_actions_working_dir }}
+        # env:
+        #   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        #   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        run: terraform init
+
+      - name: Validate Terraform files
+        working-directory: ${{ env.tf_actions_working_dir }}
+        run: |
+          terraform validate
+
+      # - name: Run Terraform & save state
+      #   working-directory: ${{ env.tf_actions_working_dir }}
+      #   run: |
+      #     terraform plan
+      #     terraform apply -auto-approve

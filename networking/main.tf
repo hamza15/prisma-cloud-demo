@@ -8,7 +8,7 @@ resource "aws_vpc" "prisma_vpc" {
 }
 
 resource "aws_default_security_group" "vpc_sg" {
-  vpc_id = aws_vpc.prisma_vpc.id
+  # vpc_id = aws_vpc.prisma_vpc.id
 
   ingress {
     protocol  = "-1"

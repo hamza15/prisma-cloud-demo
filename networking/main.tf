@@ -3,7 +3,7 @@ resource "aws_vpc" "prisma_vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
   tags = {
-    Name = "primse_vpc"
+    Name = "primsa_vpc"
   }
 }
 
@@ -23,5 +23,8 @@ resource "aws_default_security_group" "vpc_sg" {
     to_port     = 0
     protocol    = "-1"
     cidr_blocks = ["0.0.0.0/0"]
+  }
+  tags = {
+    Name = "default rules"
   }
 }

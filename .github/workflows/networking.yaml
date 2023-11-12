@@ -8,7 +8,6 @@ on:
     paths:
       - 'networking/**'
       - '.github/workflows/networking.yaml'
-# only executes on pushes that change files under the networking folder.
 
 jobs:
   build:

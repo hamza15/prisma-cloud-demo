@@ -3,7 +3,7 @@ name: Deploy & configure Cloud Networking
 on:
   push:
     branches:
-      - main
+      - master
       - dev
     paths:
       - 'networking/**'

@@ -3,10 +3,12 @@ resource "aws_vpc" "prisma_vpc" {
   enable_dns_support   = true
   enable_dns_hostnames = true
 
-  depends_on = [ aws_default_security_group.vpc_sg ]
+  # depends_on = [ aws_default_security_group.vpc_sg ]
 }
 
 resource "aws_default_security_group" "vpc_sg" {
+
+  vpc_id = aws_vpc.prisma_vpc.id
 
   ingress {
     protocol  = "-1"

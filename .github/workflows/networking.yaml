@@ -31,6 +31,11 @@ jobs:
         with:
           api-key: ${{ secrets.BC_API_KEY }}
 
+#       - name: Run Checkov
+#         run: |
+#           export PRISMA_API_URL=https://api.ca.prismacloud.io 
+# checkov -d networking --bc-api-key PRISMA_ACCESS_KEY::PRISMA_SECRET_KEY --repo-id hamza15/prisma-cloud-demo
+
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:

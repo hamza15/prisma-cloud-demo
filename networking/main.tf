@@ -2,8 +2,9 @@ resource "aws_vpc" "prisma_vpc" {
   cidr_block           = "10.0.0.0/16"
   enable_dns_support   = true
   enable_dns_hostnames = true
-
-  # depends_on = [ aws_default_security_group.vpc_sg ]
+  tags = {
+    Name = "primse_vpc"
+  }
 }
 
 resource "aws_default_security_group" "vpc_sg" {

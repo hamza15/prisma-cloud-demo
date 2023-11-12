@@ -1,14 +1,12 @@
 resource "aws_vpc" "prisma_vpc" {
   cidr_block           = "10.0.0.0/16"
-  enable_dns_support   = true # Internal domain name
-  enable_dns_hostnames = true # Internal host name
-  # default_security_group_id = aws_default_security_group.vpc_sg.id
+  enable_dns_support   = true
+  enable_dns_hostnames = true
 
   depends_on = [ aws_default_security_group.vpc_sg ]
 }
 
 resource "aws_default_security_group" "vpc_sg" {
-  # vpc_id = aws_vpc.prisma_vpc.id
 
   ingress {
     protocol  = "-1"

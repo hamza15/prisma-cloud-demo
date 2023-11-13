@@ -8,6 +8,7 @@ on:
     paths:
       - 'compute/**'
       - '.github/workflows/compute.yaml'
+      - 'policies/**'
 
 jobs:
   build:

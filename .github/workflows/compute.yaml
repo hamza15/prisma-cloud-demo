@@ -53,10 +53,8 @@ jobs:
       - name: Terraform Plan
         working-directory: ${{ env.tf_actions_working_dir }}
         run: |
-          # terraform plan
           terraform plan -out tfplan
-          # terraform show -json tfplan | jq '.' > tfplan.json
-          terraform show -json tf.plan > tfplan.json
+          terraform show -json tfplan | jq '.' > tfplan.json
 
       # - name: Test with Checkov
       #   id: checkov

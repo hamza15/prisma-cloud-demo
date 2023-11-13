@@ -23,19 +23,7 @@ jobs:
         with:
           fetch-depth: 0
 
-      - name: Prisma Cloud - Bridgecrew
-        id: prisma-cloud
-        uses: bridgecrewio/checkov-action@master
-        env:
-          PRISMA_API_URL: https://api.ca.prismacloud.io
-        with:
-          api-key: ${{ secrets.BC_API_KEY }}
-
-#       - name: Run Checkov
-#         run: |
-#           export PRISMA_API_URL=https://api.ca.prismacloud.io 
-# checkov -d networking --bc-api-key PRISMA_ACCESS_KEY::PRISMA_SECRET_KEY --repo-id hamza15/prisma-cloud-demo
-
+      # Configure AWS Credentials
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -43,22 +31,35 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      # Configure Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
+      # Terraform initialize
       - name: Terraform init
         working-directory: ${{ env.tf_actions_working_dir }}
         run: terraform init
 
+      # Validate Terraform files
       - name: Validate Terraform files
         working-directory: ${{ env.tf_actions_working_dir }}
         run: |
           terraform validate
 
-      - name: Validate Terraform files
+      # Run Terraform Plan
+      - name: Terraform plan
         working-directory: ${{ env.tf_actions_working_dir }}
         run: |
           terraform plan
+
+      # Run Prisma Cloud Checkov to check for misconfigurations
+      - name: Prisma Cloud - Bridgecrew
+        id: prisma-cloud
+        uses: bridgecrewio/checkov-action@master
+        env:
+          PRISMA_API_URL: https://api.ca.prismacloud.io
+        with:
+          api-key: ${{ secrets.BC_API_KEY }}
 
       # - name: Run Terraform & save state
       #   working-directory: ${{ env.tf_actions_working_dir }}

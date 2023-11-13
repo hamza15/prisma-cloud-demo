@@ -24,14 +24,6 @@ jobs:
         with:
           fetch-depth: 0
 
-      # - name: Run Prisma Cloud 
-      #   id: prisma-cloud
-      #   uses: bridgecrewio/checkov-action@master
-      #   env:
-      #     PRISMA_API_URL: https://api.ca.prismacloud.io
-      #   with:
-      #     api-key: ${{ secrets.BC_API_KEY }}
-
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -39,25 +31,28 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1
 
+      # Configure Terraform
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
 
+      # Terraform initialize
       - name: Terraform init
         working-directory: ${{ env.tf_actions_working_dir }}
         run: terraform init
 
+      # Validate Terraform files
       - name: Validate Terraform files
         working-directory: ${{ env.tf_actions_working_dir }}
         run: |
           terraform validate
 
+      # Run Terraform Plan
       - name: Terraform Plan
         working-directory: ${{ env.tf_actions_working_dir }}
         run: |
-          # terraform plan
-          terraform plan -out output.tfplan
-          # terraform show -json output.tfplan | jq '.' > tfplan.json
+          terraform plan
 
+      # Run Prisma Cloud Checkov to check for misconfigurations
       - name: Run Checkov action
         id: checkov
         uses: bridgecrewio/checkov-action@master
@@ -68,14 +63,10 @@ jobs:
           skip_check: CKV_AWS_50,CKV_AWS_116,CKV_AWS_116,CKV_AWS_117,CKV_AWS_272,CKV_AWS_115,CKV2_AWS_11
           api-key: ${{ secrets.BC_API_KEY }}
 
-      # - name: Install Checkov
+      # - name: Apply Terraform & save state
+      #   working-directory: ${{ env.tf_actions_working_dir }}
       #   run: |
-      #     pip3 install checkov
-
-      # - name: Run Checkov
-      #   working-directory: policies
-      #   run: |
-      #     export PRISMA_API_URL=https://api.ca.prismacloud.io 
-      #     checkov --external-checks-dir policies -c CKV_AWS_666 --bc-api-key ${{ secrets.BC_API_KEY }} --repo-id hamza15/prisma-cloud-demo --skip-check CKV_AWS_50,CKV_AWS_116,CKV_AWS_116,CKV_AWS_117,CKV_AWS_272,CKV_AWS_115,CKV2_AWS_11
+      #     terraform plan
+      #     terraform apply -auto-approve
 
       # checkov -f tfplan.json --external-checks-dir ../policies -c CKV_AWS_666 

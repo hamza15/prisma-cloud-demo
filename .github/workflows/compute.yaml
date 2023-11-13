@@ -53,8 +53,9 @@ jobs:
       - name: Terraform Plan
         working-directory: ${{ env.tf_actions_working_dir }}
         run: |
-          terraform plan -out tfplan
-          terraform show -json tf.plan  > tf.json 
+          jq
+          # terraform plan -out tfplan
+          # terraform show -json tf.plan  > tf.json 
 
       - name: Install Checkov
         run: |

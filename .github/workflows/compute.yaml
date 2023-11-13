@@ -61,7 +61,6 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
-          quiet: true
           framework: terraform
           directory: policies
           output_format: github_failed_only

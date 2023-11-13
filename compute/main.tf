@@ -21,7 +21,7 @@ resource "aws_lambda_function" "test_lambda" {
   function_name = "checkov_lambda"
   role          = aws_iam_role.lambda_role.arn
   handler       = "index.lambda_handler"
-  memory_size   = 3072 # 3072 x - <= 2048
+  memory_size   = 2048 # 3072 x - <= 2048
   
   runtime = "nodejs14.x"
 }

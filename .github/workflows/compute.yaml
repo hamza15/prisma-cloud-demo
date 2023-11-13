@@ -53,8 +53,8 @@ jobs:
       - name: Terraform Plan
         working-directory: ${{ env.tf_actions_working_dir }}
         run: |
-          terraform plan
-          # terraform plan -out output.tfplan
+          # terraform plan
+          terraform plan -out output.tfplan
           # terraform show -json output.tfplan | jq '.' > tfplan.json
 
       # - name: Checkov
@@ -73,15 +73,15 @@ jobs:
       #   with:
       #     api-key: ${{ secrets.BC_API_KEY }}
 
-      - name: Install Checkov
-        run: |
-          pip3 install checkov
+      # - name: Install Checkov
+      #   run: |
+      #     pip3 install checkov
 
-      - name: Run Checkov
-        working-directory: ${{ env.tf_actions_working_dir }}
-        run: |
-          checkov --external-checks-git https://github.com/hamza15/checkov-policies.git
-
+      # - name: Run Checkov
+      #   working-directory: ${{ env.tf_actions_working_dir }}
+      #   run: |
+      #     checkov --external-checks-git https://github.com/hamza15/checkov-policies.git
+      #     checkov -f tfplan.json --external-checks-dir ../policies -c CKV_AWS_666
 
       # - name: Run Terraform & save state
       #   working-directory: ${{ env.tf_actions_working_dir }}

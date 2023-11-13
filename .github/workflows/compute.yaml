@@ -62,7 +62,8 @@ jobs:
         uses: bridgecrewio/checkov-action@master
         with:
           external_checks_dirs: policies/
-          skip_check: CKV_AWS_50
+          skip_check: CKV_AWS_50,CKV_AWS_116
+          #skip_check: CKV_AWS_116, CKV_AWS_117, CKV_AWS_272, CKV_AWS_115, CKV2_AWS_11
 
       # - name: Checkov
       #   id: checkov

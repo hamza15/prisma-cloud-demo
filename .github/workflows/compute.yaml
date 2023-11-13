@@ -57,6 +57,12 @@ jobs:
           terraform plan -out output.tfplan
           # terraform show -json output.tfplan | jq '.' > tfplan.json
 
+      - name: Run Checkov action
+        id: checkov
+        uses: bridgecrewio/checkov-action@master
+        with:
+          external_checks_dirs: policies/
+
       # - name: Checkov
       #   id: checkov
       #   uses: bridgecrewio/checkov-action@master

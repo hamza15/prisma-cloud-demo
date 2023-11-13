@@ -62,9 +62,11 @@ jobs:
         id: checkov
         uses: bridgecrewio/checkov-action@master
         with:
+          env:
+          PRISMA_API_URL: https://api.ca.prismacloud.io
           external_checks_dirs: policies/
           skip_check: CKV_AWS_50,CKV_AWS_116,CKV_AWS_116,CKV_AWS_117,CKV_AWS_272,CKV_AWS_115,CKV2_AWS_11
-          #skip_check: 
+          api-key: ${{ secrets.BC_API_KEY }}
 
       # - name: Checkov
       #   id: checkov

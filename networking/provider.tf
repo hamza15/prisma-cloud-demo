@@ -9,6 +9,8 @@ terraform {
     bucket  = "prisma-tf-backend"
     key  = "terraform/state-networking/terraform.tfstate"
     region = "us-east-1"
+    encrypt = true
+    dynamodb_table = "tf-backend"
   }
 }
 

@@ -26,6 +26,6 @@ resource "aws_default_security_group" "vpc_sg" {
   }
 
   tags = {
-    Name = "default rules"
+    Name = "default sg rules"
   }
 }

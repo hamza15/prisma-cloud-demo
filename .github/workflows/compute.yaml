@@ -57,14 +57,21 @@ jobs:
           # terraform plan -out output.tfplan
           # terraform show -json output.tfplan | jq '.' > tfplan.json
 
-      - name: Checkov
-        id: checkov
+      # - name: Checkov
+      #   id: checkov
+      #   uses: bridgecrewio/checkov-action@master
+      #   with:
+      #     framework: terraform
+      #     directory: policies
+      #     soft_fail: false
+
+      - name: Prisma Cloud - Bridgecrew
+        id: prisma-cloud
         uses: bridgecrewio/checkov-action@master
+        env:
+          PRISMA_API_URL: https://api.ca.prismacloud.io
         with:
-          framework: terraform
-          directory: policies
-          output_format: github_failed_only
-          soft_fail: false
+          api-key: ${{ secrets.BC_API_KEY }}
 
       # - name: Test with Checkov
       #   id: checkov
